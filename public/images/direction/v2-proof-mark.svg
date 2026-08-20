@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="220" viewBox="0 0 760 220">
+  <rect width="760" height="220" fill="none"/>
+  <g fill="none" stroke="#e5342a" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M42 138 C126 99 224 101 328 124 C433 147 532 142 688 91" stroke-width="8"/>
+    <path d="M54 156 C171 188 341 186 490 155" stroke-width="5" stroke-dasharray="2 17"/>
+    <path d="M615 49 l27 28 52-58" stroke-width="11"/>
+    <path d="M104 59 C145 25 224 30 256 73" stroke-width="5"/>
+  </g>
+  <g fill="#e5342a" font-family="Rock Salt, cursive" font-weight="700">
+    <text x="282" y="76" font-size="34" transform="rotate(-4 282 76)">PRINT THIS ONE!</text>
+    <text x="63" y="203" font-size="24" transform="rotate(2 63 203)">keep the counter memory</text>
+  </g>
+</svg>
