@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+>
+  <url>
+    <loc>https://mini.snapfoto.co/</loc>
+    <image:image>
+      <image:loc>https://mini.snapfoto.co/images/product/optimized/product-angle-front-optimized.webp</image:loc>
+      <image:title>SnapShotMini 桌上型拍貼機斜角產品視圖</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://mini.snapfoto.co/images/product/optimized/product-front-optimized.webp</image:loc>
+      <image:title>SnapShotMini 桌上型拍貼機正面產品視圖</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://mini.snapfoto.co/images/product/optimized/product-angle-left-optimized.webp</image:loc>
+      <image:title>SnapShotMini 桌上型拍貼機側面產品視圖</image:title>
+    </image:image>
+  </url>
+</urlset>

@@ -17,6 +17,7 @@ const versionPages: Record<VersionId, () => React.JSX.Element> = {
 };
 
 function readVersion(): VersionId {
+  if (typeof window === "undefined") return "v5";
   const match = window.location.pathname.match(/\/(v[1-5])(?:\/|$)/);
   return (match?.[1] as VersionId | undefined) ?? "v5";
 }
