@@ -62,11 +62,60 @@ describe("SnapShotMini landing page directions", () => {
   it("does not pretend to submit leads without an endpoint", () => {
     render(<App />);
 
+    fireEvent.change(screen.getByLabelText(/店家或品牌名稱/), { target: { value: "測試品牌" } });
+    fireEvent.change(screen.getByLabelText(/聯絡人姓名/), { target: { value: "陳小姐" } });
+    fireEvent.change(screen.getByLabelText(/聯絡電話/), { target: { value: "02-3765-5060" } });
+    fireEvent.change(screen.getByLabelText(/電子郵件/), { target: { value: "visitor@example.com" } });
     const submitButton = screen.getByRole("button", { name: "送出合作需求" });
     fireEvent.submit(submitButton.closest("form")!);
 
     expect(
       screen.getByText("目前暫時無法送出合作需求，請稍後再試。"),
     ).toBeInTheDocument();
+  });
+
+  it("requires only the core contact fields", () => {
+    window.history.replaceState({}, "", "/");
+    render(<App />);
+
+    expect(screen.getByLabelText(/店家或品牌名稱/)).toBeRequired();
+    expect(screen.getByLabelText(/聯絡人姓名/)).toBeRequired();
+    expect(screen.getByLabelText(/聯絡電話/)).toBeRequired();
+    expect(screen.getByLabelText(/電子郵件/)).toBeRequired();
+    expect(screen.getByLabelText(/店家類型/)).not.toBeRequired();
+    expect(screen.getByLabelText(/門市數量/)).not.toBeRequired();
+    expect(screen.getByLabelText(/合作需求/)).not.toBeRequired();
+  });
+
+  it("shows a specific error for an invalid phone number", () => {
+    window.history.replaceState({}, "", "/");
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText(/店家或品牌名稱/), { target: { value: "測試品牌" } });
+    fireEvent.change(screen.getByLabelText(/聯絡人姓名/), { target: { value: "陳小姐" } });
+    const phone = screen.getByLabelText(/聯絡電話/);
+    fireEvent.change(phone, { target: { value: "1234" } });
+    fireEvent.change(screen.getByLabelText(/電子郵件/), { target: { value: "visitor@example.com" } });
+    fireEvent.submit(screen.getByRole("button", { name: "送出合作需求" }).closest("form")!);
+
+    expect(screen.getByText(/請輸入有效的臺灣電話/)).toBeInTheDocument();
+    expect(phone).toHaveAttribute("aria-invalid", "true");
+    expect(phone).toHaveFocus();
+  });
+
+  it("rejects incomplete email addresses before submission", () => {
+    window.history.replaceState({}, "", "/");
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText(/店家或品牌名稱/), { target: { value: "測試品牌" } });
+    fireEvent.change(screen.getByLabelText(/聯絡人姓名/), { target: { value: "陳小姐" } });
+    fireEvent.change(screen.getByLabelText(/聯絡電話/), { target: { value: "0912 345 678" } });
+    const email = screen.getByLabelText(/電子郵件/);
+    fireEvent.change(email, { target: { value: "chen@mem" } });
+    fireEvent.submit(screen.getByRole("button", { name: "送出合作需求" }).closest("form")!);
+
+    expect(screen.getByText(/請輸入完整的電子郵件/)).toBeInTheDocument();
+    expect(email).toHaveAttribute("aria-invalid", "true");
+    expect(email).toHaveFocus();
   });
 });

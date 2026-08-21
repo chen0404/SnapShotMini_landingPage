@@ -266,15 +266,20 @@
 .v5-contact .inquiry-form { min-width: 0; padding: 25px; border: 4px solid #111; background: var(--bone); box-shadow: 10px 10px 0 #111; }
 .v5-contact .inquiry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .v5-contact label { display: grid; min-width: 0; gap: 6px; font-size: 11px; font-weight: 900; }
-.v5-contact input, .v5-contact select, .v5-contact textarea { width: 100%; border: 3px solid #111; border-radius: 0; color: var(--ink); background: #fff; }
+.v5-contact input, .v5-contact select, .v5-contact textarea { width: 100%; border: 3px solid #111; border-radius: 0; color: var(--ink); background: #fff; font-size: 16px; }
 .v5-contact input, .v5-contact select { height: 44px; padding: 0 9px; }
 .v5-contact textarea { padding: 9px; resize: vertical; }
+.v5-contact label.has-error input { border-color: var(--pink); box-shadow: 3px 3px 0 var(--pink); }
+.v5-contact .inquiry-field-hint, .v5-contact .inquiry-field-error { font-size: 11px; line-height: 1.45; }
+.v5-contact .inquiry-field-hint { color: var(--ink); font-weight: 700; }
+.v5-contact .inquiry-field-error { padding: 4px 6px; color: var(--ink); background: var(--pink); font-weight: 950; }
 .v5-contact .inquiry-notes { margin-top: 14px; }
 .v5-contact .inquiry-form > button { display: flex; width: 100%; min-height: 52px; align-items: center; justify-content: center; gap: 2px; margin-top: 18px; border: 3px solid #111; background: var(--lime); box-shadow: 5px 5px 0 #111; font-weight: 950; cursor: pointer; }
 .v5-contact .inquiry-form > button:disabled { cursor: wait; opacity: .72; }
 .v5-contact .inquiry-legal { margin: 20px 0 0; font-size: 11px; line-height: 1.5; }
 .v5-contact .inquiry-legal a { font-weight: 900; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .v5-contact .inquiry-message { padding: 10px; border: 3px solid #111; background: #fff; }
+.v5-contact .inquiry-message.is-error { color: var(--ink); background: var(--pink); font-weight: 900; }
 
 .v5-footer {
   padding: clamp(56px, 7vw, 92px) var(--v5-gutter) max(38px, env(safe-area-inset-bottom));

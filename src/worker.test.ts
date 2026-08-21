@@ -55,10 +55,44 @@ describe("lead form worker", () => {
 
   it("rejects invalid lead data", async () => {
     const sendEmail = vi.fn();
-    const response = await handleRequest(createRequest({ ...lead, email: "not-an-email" }), env, sendEmail);
+    const response = await handleRequest(createRequest({ ...lead, email: "chen@mem" }), env, sendEmail);
 
     expect(response.status).toBe(422);
     expect(sendEmail).not.toHaveBeenCalled();
+  });
+
+  it("rejects invalid phone numbers", async () => {
+    const sendEmail = vi.fn();
+    const response = await handleRequest(createRequest({ ...lead, phone: "1234" }), env, sendEmail);
+
+    expect(response.status).toBe(422);
+    expect(sendEmail).not.toHaveBeenCalled();
+  });
+
+  it.each(["businessName", "contactName", "phone", "email"])(
+    "rejects a missing required %s field",
+    async (field) => {
+      const sendEmail = vi.fn();
+      const response = await handleRequest(createRequest({ ...lead, [field]: "" }), env, sendEmail);
+
+      expect(response.status).toBe(422);
+      expect(sendEmail).not.toHaveBeenCalled();
+    },
+  );
+
+  it("accepts a lead without optional fields", async () => {
+    const sendEmail = vi.fn().mockResolvedValue({ error: null });
+    const response = await handleRequest(createRequest({
+      ...lead,
+      businessType: "",
+      locations: "",
+      notes: "",
+    }), env, sendEmail);
+
+    expect(response.status).toBe(200);
+    expect(sendEmail).toHaveBeenCalledOnce();
+    const email = sendEmail.mock.calls[0][1];
+    expect(email.html.match(/未填寫/g)).toHaveLength(3);
   });
 
   it("accepts honeypot submissions without sending email", async () => {

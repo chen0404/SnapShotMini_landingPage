@@ -9,7 +9,7 @@ interface Env {
 
 interface LeadPayload {
   businessName: string;
-  businessType: "cafe" | "creative-store" | "chain-brand" | "other";
+  businessType: "" | "cafe" | "creative-store" | "chain-brand" | "other";
   contactName: string;
   email: string;
   locations: string;
@@ -32,7 +32,7 @@ type SendEmail = (
 ) => Promise<EmailSendResult>;
 
 const maxBodyLength = 16_000;
-const businessTypeLabels: Record<LeadPayload["businessType"], string> = {
+const businessTypeLabels: Record<Exclude<LeadPayload["businessType"], "">, string> = {
   cafe: "咖啡廳",
   "creative-store": "文創店",
   "chain-brand": "品牌連鎖店",
@@ -69,6 +69,15 @@ function readString(value: unknown, maxLength: number, required = true) {
   return normalized;
 }
 
+function isValidTaiwanPhone(value: string) {
+  const normalized = value.replace(/[\s().-]/g, "");
+  return /^(?:09\d{8}|0[2-8]\d{7,8}|\+886(?:9\d{8}|[2-8]\d{7,8}))$/.test(normalized);
+}
+
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+}
+
 function validateLead(value: unknown): LeadPayload | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const body = value as Record<string, unknown>;
@@ -76,14 +85,14 @@ function validateLead(value: unknown): LeadPayload | null {
   const contactName = readString(body.contactName, 50);
   const phone = readString(body.phone, 30);
   const email = readString(body.email, 254);
-  const businessType = readString(body.businessType, 30);
+  const businessType = readString(body.businessType ?? "", 30, false);
   const locations = readString(body.locations ?? "", 3, false);
   const notes = readString(body.notes ?? "", 1000, false);
   const submissionId = readString(body.submissionId ?? "", 120, false);
 
-  if (!businessName || !contactName || !phone || !email || !businessType || locations === null || notes === null || submissionId === null) return null;
-  if (!/^\S+@\S+\.\S+$/.test(email)) return null;
-  if (!(businessType in businessTypeLabels)) return null;
+  if (!businessName || !contactName || !phone || !email || businessType === null || locations === null || notes === null || submissionId === null) return null;
+  if (!isValidTaiwanPhone(phone) || !isValidEmail(email)) return null;
+  if (businessType && !(businessType in businessTypeLabels)) return null;
   if (locations && (!/^\d{1,3}$/.test(locations) || Number(locations) < 1 || Number(locations) > 999)) return null;
   if (submissionId && !/^[a-zA-Z0-9_-]+$/.test(submissionId)) return null;
 
@@ -115,7 +124,7 @@ function buildEmail(lead: LeadPayload) {
     ["聯絡人姓名", lead.contactName],
     ["聯絡電話", lead.phone],
     ["電子郵件", lead.email],
-    ["店家類型", businessTypeLabels[lead.businessType]],
+    ["店家類型", lead.businessType ? businessTypeLabels[lead.businessType] : "未填寫"],
     ["門市數量", lead.locations || "未填寫"],
     ["合作需求", lead.notes || "未填寫"],
   ] as const;
