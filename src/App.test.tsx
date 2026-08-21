@@ -33,6 +33,32 @@ describe("SnapShotMini landing page directions", () => {
     expect(screen.getByRole("heading", { name: /不用騰出一坪/ })).toBeInTheDocument();
   });
 
+  it("provides the V5 header navigation on desktop and mobile", () => {
+    window.history.replaceState({}, "", "/");
+    render(<App />);
+
+    expect(screen.getByRole("navigation", { name: "主要導覽" })).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: "洽談客製合作" })[0]).toHaveAttribute("href", "#v5-contact");
+
+    fireEvent.click(screen.getByLabelText("開啟導覽選單"));
+    expect(screen.getByRole("navigation", { name: "手機導覽" })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText("關閉導覽選單"));
+    expect(screen.queryByRole("navigation", { name: "手機導覽" })).not.toBeInTheDocument();
+  });
+
+  it("shows verified company, contact, social, and privacy information", () => {
+    window.history.replaceState({}, "", "/");
+    render(<App />);
+
+    expect(screen.getByText("享印生活股份有限公司")).toBeInTheDocument();
+    expect(screen.getByText("統一編號 90334859")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /02-3765-5060/ })).toHaveAttribute("href", "tel:+886237655060");
+    expect(screen.getByRole("link", { name: /chen@snapfoto.co/ })).toHaveAttribute("href", "mailto:chen@snapfoto.co");
+    expect(screen.getByRole("link", { name: "Instagram" })).toHaveAttribute("href", "https://www.instagram.com/snapshot.tw/");
+    expect(screen.getAllByRole("link", { name: "隱私權政策" })[0]).toHaveAttribute("href", expect.stringContaining("snapfoto.co"));
+  });
+
   it("does not pretend to submit leads without an endpoint", () => {
     render(<App />);
 

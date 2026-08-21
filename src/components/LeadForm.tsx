@@ -107,7 +107,8 @@ export function LeadForm() {
           </button>
 
           <p className="mt-4 text-xs leading-5 text-carbon/58">
-            送出代表你同意由專人依填寫資訊與你聯繫。正式上線前需補上隱私權政策連結。
+            送出代表你同意由專人依填寫資訊與你聯繫，並同意
+            <a className="underline" href="https://snapfoto.co/%e9%9a%b1%e7%a7%81%e6%ac%8a%e6%94%bf%e7%ad%96" target="_blank" rel="noreferrer">隱私權政策</a>。
           </p>
 
           {message ? (

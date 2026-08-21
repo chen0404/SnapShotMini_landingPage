@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "snapshotmini-lead-form",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-08-21",
+  "workers_dev": true,
+  "vars": {
+    "ALLOWED_ORIGINS": "http://localhost:5173,http://localhost:5174,http://127.0.0.1:5173,http://127.0.0.1:5174,https://chen0404.github.io",
+    "LEAD_TO_EMAIL": "chen@snapfoto.co",
+    "RESEND_FROM": "SnapShotMini 合作詢問 <onboarding@resend.dev>"
+  }
+}

@@ -6,19 +6,24 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "oxlint src",
+    "lint": "oxlint src worker",
     "test": "vitest",
     "test:run": "vitest run",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "worker:dev": "wrangler dev",
+    "worker:deploy": "wrangler deploy",
+    "worker:secret": "wrangler secret put RESEND_API_KEY"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
     "@fontsource/noto-sans-tc": "^5.3.0",
     "@fontsource/rock-salt": "^5.3.0",
     "@gsap/react": "^2.1.2",
+    "@phosphor-icons/react": "^2.1.10",
     "gsap": "^3.15.0",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "resend": "^6.21.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
@@ -33,6 +38,7 @@
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.1.5",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "wrangler": "^4.125.0"
   }
 }

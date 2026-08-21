@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { faqItems } from "../../data/content";
 
 type FormState = "idle" | "submitting" | "success" | "error";
@@ -6,6 +6,7 @@ type FormState = "idle" | "submitting" | "success" | "error";
 export function InquiryForm() {
   const [state, setState] = useState<FormState>("idle");
   const [message, setMessage] = useState("");
+  const submissionId = useRef("");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -20,15 +21,20 @@ export function InquiryForm() {
     setState("submitting");
     setMessage("");
     const form = event.currentTarget;
+    if (!submissionId.current) submissionId.current = crypto.randomUUID();
 
     try {
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        body: JSON.stringify({
+          ...Object.fromEntries(new FormData(form)),
+          submissionId: submissionId.current,
+        }),
       });
       if (!response.ok) throw new Error("Lead form request failed");
       form.reset();
+      submissionId.current = "";
       setState("success");
       setMessage("資料已送出，我們會由專人與你聯繫。");
     } catch {
@@ -39,6 +45,10 @@ export function InquiryForm() {
 
   return (
     <form className="inquiry-form" onSubmit={handleSubmit} aria-busy={state === "submitting"}>
+      <label className="inquiry-honeypot" aria-hidden="true">
+        <span>網站</span>
+        <input name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </label>
       <div className="inquiry-grid">
         <label>
           <span>店家或品牌名稱</span>
@@ -78,7 +88,10 @@ export function InquiryForm() {
       <button type="submit" disabled={state === "submitting"}>
         {state === "submitting" ? <><span className="inquiry-spinner" aria-hidden="true" />正在送出…</> : "送出合作需求"}
       </button>
-      <p className="inquiry-legal">送出代表你同意由專人依填寫資訊與你聯繫。</p>
+      <p className="inquiry-legal">
+        送出代表你同意由專人依填寫資訊與你聯繫，並同意
+        <a href="https://snapfoto.co/%e9%9a%b1%e7%a7%81%e6%ac%8a%e6%94%bf%e7%ad%96" target="_blank" rel="noreferrer">隱私權政策</a>。
+      </p>
       {message ? (
         <p className={`inquiry-message is-${state}`} role="status" aria-live="polite">{message}</p>
       ) : null}
