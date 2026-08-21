@@ -21,7 +21,7 @@ npm run test:run
 
 推送至 `main` 後，GitHub Actions 會建置並發布 `dist`。第一次使用時，請在 repository 的 **Settings → Pages → Build and deployment** 將來源設為 **GitHub Actions**。
 
-預定網址：<https://chen0404.github.io/SnapShotMini_landingPage/>
+正式網址：<https://mini.snapfoto.co/>
 
 聯絡表單需要另外提供 `VITE_LEAD_FORM_ENDPOINT`；未設定時不會假裝送出成功。
 
